@@ -1,0 +1,40 @@
+
+--1.	Write a query to list the cities which have more population than Bangalore.--
+SELECT * FROM city1
+WHERE city_population>(SELECT city_population FROM city1 WHERE CITY_NAME='BANGALORE');
+
+----2.	Display all the branch names from Chennai.----
+SELECT branch1.b_name FROM BRANCH1 WHERE city_id=(SELECT CITY_ID FROM city1 WHERE city_name='CHENNAI');
+
+--3.	Display a city name which does not have any branches----
+SELECT CITY_NAME FROM city1 WHERE city_id NOT IN (SELECT CITY_ID FROM branch1);
+
+----4.	Display branch name, address and phone number of all the branches where the name starts 
+--with either B or M and the city name starts with either B or C.
+
+SELECT B_NAME,b_address,b_phone FROM branch1 WHERE b_name NOT LIKE 'B%' AND b_name NOT LIKE 'M%' and
+city_id in (select city_id from city1 where city_name NOT LIKE 'B%' AND CITY_NAME NOT LIKE 'C%');  
+
+--5.	How many branches we have in Bangalore?--
+SELECT COUNT(b_NAME) AS BRANCHESCOUNT FROM branch1 WHERE city_id=(SELECT CITY_ID FROM city1 WHERE CITY_NAME='BANGALORE') 
+GROUP BY city_id;
+
+---6.	Display the branches which are in the Ring road of any city.---
+SELECT * FROM branch1 WHERE b_address LIKE '%RING ROAD%';
+
+---7.	Display the city name, branch name. Order the data based on the city name.---
+SELECT CITY_NAME,B_NAME FROM city1 JOIN branch1 ON city1.city_id=branch1.city_id ORDER BY city1.city_name;
+
+--8.	Display the city name and the number of branches in each city.--
+SELECT CITY_NAME,COUNT(B_NAME) AS BRANCHCOUNT FROM city1 JOIN branch1 ON city1.city_id=branch1.city_id GROUP BY city1.city_name;
+
+---9.	Display the city name which has most number of branches.
+SELECT CITY_NAME FROM city1 WHERE city_id IN (SELECT city_id FROM branch1 GROUP BY CITY_ID HAVING count(B_name)=
+(select max(count(B_NAME)) FROM branch1 GROUP BY CITY_ID)); 
+
+---10.	Display the city name, population, number of branches in each city.---
+select CITY_NAME,city1.city_population,COUNT(branch1.b_name) AS COUNTS FROM city1 FULL JOIN branch1 ON branch1.city_id=city1.city_id 
+GROUP BY CITY_NAME,city1.city_population;
+
+
+ 
