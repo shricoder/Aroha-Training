@@ -1,0 +1,323 @@
+------------------------------City_branch----------------------------------
+
+create table city
+(city_id number(2) primary key,
+city_name varchar2(20) not null,
+city_population varchar2(20));
+
+Insert all
+into city values(10,'Bangalore',2367890)
+into city values(20,'Chennai',6474854)
+into city values(30,'Mumbai',783983736)
+select * from dual;
+
+select * from city;
+
+create table branch
+(b_id number(4) primary key,
+b_name varchar2(20) not null,
+b_address varchar2(20),
+b_phone number(10),
+city_id number(2) references city(city_id));
+ 
+insert all
+into branch values(500,'BTM Layout','185, ring road',789056,10)
+into branch values(501,'Jayanagar','44, 15th main',578934,10)
+into branch values(502,'Ashok nagar','south end circle',2856726,20)
+into branch values(503,'Mount road','ashoka pillar',774589,20)
+into branch values(504,'JP nagar','Nandanam',9986253,10)
+select * from dual;
+
+
+
+
+create table branch
+(b_id number(4) primary key,
+b_name varchar2(20) not null,
+b_address varchar2(20),
+b_phone number(10),
+city_id number(2) references city(city_id));
+ 
+insert all
+into branch values(500,'BTM Layout','185, ring road',789056,10)
+into branch values(501,'Jayanagar','44, 15th main',578934,10)
+into branch values(502,'Ashok nagar','south end circle',2856726,20)
+into branch values(503,'Mount road','ashoka pillar',774589,20)
+into branch values(504,'JP nagar','Nandanam',9986253,10)
+select * from dual;
+
+select * from branch;
+
+
+-------------QUERIES------------
+
+1.Write a query to list the cities which have more population than Bangalore.
+
+SELECT CITY_NAME FROM CITY
+WHERE CITY_POPULATION>(SELECT CITY_POPULATION FROM CITY WHERE CITY_NAME='Bangalore');
+
+2.Display all the branch names from Chennai.
+
+SELECT B_NAME FROM BRANCH WHERE CITY_ID IN(SELECT CITY_ID FROM CITY WHERE CITY_NAME='Chennai');
+
+3.Display a city name which does not have any branches
+
+select city_name from city WHERE CITY_ID IN(SELECT CITY_ID FROM BRANCH WHERE b_name IS NULL);
+
+4.Display branch name, address and phone number of all the branches where the name starts with 
+either B or M and the city name starts with either B or C.
+
+SELECT b_name,b_address,b_phone FROM branch
+WHERE substr(b_name,1,1) in ('B','M') 
+AND city_id IN (SELECT city_id FROM CITY 
+               WHERE SUBSTR(city_name,1,1) IN ('B','C'));
+    
+    
+    select * from branch;
+    
+5.How many branches we have in Bangalore?
+
+select count(b_name) from branch where city_id in (select city_id from city where city_name='Bangalore');
+
+6.Display the branches which are in the Ring road of any city.
+
+select b_name,b_address from branch 
+where b_address like '%ring road%';
+
+7.Display the city name, branch name. Order the data based on the city name.
+
+SELECT CITY_NAME,B_NAME FROM CITY,BRANCH
+WHERE CITY.CITY_ID=BRANCH.CITY_ID
+ORDER BY CITY_NAME;
+
+8.Display the city name and the number of branches in each city.
+
+SELECT COUNT(B_NAME),CITY.CITY_NAME FROM CITY,BRANCH
+WHERE CITY.CITY_ID=BRANCH.CITY_ID
+GROUP BY CITY_NAME;
+
+9.Display the city name which has most number of branches.
+
+SELECT CITY_NAME FROM city 
+WHERE city_id IN (SELECT city_id FROM branch 
+GROUP BY CITY_ID 
+HAVING count(B_name)=
+(select max(count(B_NAME)) FROM branch 
+GROUP BY CITY_ID)); 
+
+10.Display the city name, population, number of branches in each city.
+
+/*SELECT COUNT(B_NAME),CITY.CITY_NAME,CITY.CITY_POPULATION FROM CITY,BRANCH
+WHERE CITY.CITY_ID=BRANCH.CITY_ID
+GROUP BY CITY_NAME;*/
+
+OR
+
+/*select CITY_NAME,city.city_population,COUNT(branch.b_name) AS COUNTS FROM city FULL JOIN branch 
+ON branch.city_id=city.city_id 
+GROUP BY CITY_NAME,city.city_population;*/
+
+
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+
+
+   
+   2. Product Model
+
+create table product
+(p_id number(4) primary key,
+p_name varchar2(20) not null,
+p_family varchar2(20),
+price number(5) not null,
+cost number(5) not null,
+launch_date date);
+
+insert all
+into product values(100,'Marker','stationary',25,22,'15-jan-14')
+into product values(101,'Mouse','computer',450,350,'16-apr-14')
+into product values(102,'Whiteboard','stationary',450,375,'20-aug-13')
+into product values(103,'sonyvaio','computer',35000,42000,'21-sep-13')
+into product values(104,'Pendrive','computer',400,350,'18-jan-19')
+select * from dual;
+
+
+ SELECT * FROM PRODUCT;  
+--
+--  /////////////////---------------------QUERIES-----------------------////////////////------------ 
+    1. Write the select statement which gives all the products which costs more than Rs 250.
+    
+    SELECT P_NAME FROM PRODUCT 
+    WHERE COST>250;
+
+    2. Write the select statement which gives product name, cost, price and profit. (profit formula is price – cost)
+    
+    SELECT P_NAME,PRICE,COST,(PRICE-COST )PROFIT FROM PRODUCT ;
+    
+--    3. Find the products which give more profit than product Mouse
+    
+    SELECT P_NAME,(PRICE-COST)PROFIT FROM PRODUCT 
+    WHERE (Price-cost)>(SELECT (price-cost)PROFIT FROM PRODUCT WHERE P_NAME='Mouse'); 
+
+    4. Display the products which give the profit greater than 100 Rs.
+    
+    SELECT P_NAME FROM PRODUCT WHERE PRICE-COST>100; 
+
+    5. Display the products which are not from Stationary and Computer family.
+    
+    SELECT P_NAME FROM PRODUCT WHERE P_FAMILY NOT IN ('stationary','computer');
+
+    6. Display the products which give more profit than the p_id 102.
+    
+    select * from product
+    where (price-cost) > (select (price-cost) from product 
+    where p_id=102);
+
+    7. Display products which are launched in the year of 2010.
+    
+--    SELECT P_NAME FROM PRODUCT WHERE TO_CHAR(launch_date,'yyyy') =2010;
+
+    8. Display the products which name starts with either ‘S’ or ‘W’ and which belongs 
+    to Stationary and cost more than 300 Rs.
+    SELECT P_NAME FROM PRODUCT WHERE SUBSTR(P_NAME,1,1) IN ('S','W')
+    AND P_FAMILY='stationary' AND COST>300;
+    
+    9. Display the products which are launching next month.
+    
+--    /*select * from product
+    where to_char(launch_date,'mon')= to_char(add_months(sysdate,1),'mon');*/
+
+    10. Display product name which has the maximum price in the entire product table.
+    /*select * from product
+    where price=(select max(Price) from product);
+    
+    HAVING PRICE=MAX(PRICE);*/
+    
+    11. List the product name, cost, price, profit and percentage of profit we get in each product.
+
+    SELECT p_name,cost,price,(price-cost) as profit,round(((price-cost)/cost)*100) as PERC FROM product;
+
+    12. Display how many products we have in Computer family which has the price range between 2000 and 50000.
+   SELECT p_family,count(p_family) FROM product
+   WHERE p_family='computer' and price between 2000 and 50000
+   GROUP BY p_family;
+
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+
+
+
+CREATE TABLE DOCTOR(
+DOC_ID NUMBER PRIMARY KEY, FNAME VARCHAR(20)NOT NULL,LNAME VARCHAR(20)NOT NULL,
+SPECIALITY VARCHAR2(30),PHONE NUMBER(10));
+
+INSERT ALL
+INTO DOCTOR VALUES(100,'SHRIDHAR','BHARDWAJ','NEUROLOGIST',4567887687)
+INTO DOCTOR VALUES(101,'AYUSHI','VERMA','GYNECOLOGIST',9867887687)
+INTO DOCTOR VALUES(102,'RUCHI','TALWAR','CARDIOLOGIST',908887687)
+INTO DOCTOR VALUES(103,'MANISH','MALHOTRA','DERMATOLOGIST',990877687)
+SELECT * FROM DUAL;
+
+SELECT * FROM DOCTOR;
+
+CREATE TABLE PATIENT(
+PAT_ID NUMBER PRIMARY KEY,FNAME VARCHAR(20)NOT NULL,LNAME VARCHAR(20)NOT NULL,
+INSURANCE_COMPANY VARCHAR2(50),PHONE NUMBER(10));
+
+INSERT ALL
+INTO PATIENT VALUES(201,'AYUSHMAN','KHURANA','MAX LIFE',909987657)
+INTO PATIENT VALUES(202,'ANUSHKA','SHETTY','ICICI',876543456)
+INTO PATIENT VALUES(203,'AKSHAY','KUMAR','LIC',234567876)
+INTO PATIENT VALUES(204,'ANSHUMAN','SHARMA','METLIFE',908987890)
+INTO PATIENT VALUES(205,'SHAILENDRA','YADAV','UNITED INDIA',990890099)
+INTO PATIENT VALUES(206,'VIDHI','GOWDA','RELIANCE',123320908)
+INTO PATIENT VALUES(207,'AYUSHMAN','MALHOTRA','MAX LIFE',567899876)
+INTO PATIENT VALUES(208,'AAMIR','KHAN','LIC',998089453)
+INTO PATIENT VALUES(209,'SALMAN','KHAN','BAJAJ ALLIANZ',1234567790)
+SELECT * FROM DUAL;
+
+SELECT * FROM PATIENT;
+
+CREATE TABLE CASE(
+ADMISSION_DATE DATE,PAT_ID NUMBER,DOC_ID NUMBER, DIAGNOSIS VARCHAR2(150),
+constraint con_cpk primary key(admission_date,pat_id));
+
+
+insert all
+into case values('10-jun-19',201,100,'alzheimer')
+into case values('03-may-19',201,102,'heart attack')
+into case values('17-apr-17',203,100,'stml')
+into case values('28-oct-15',204,103,'skin rashes')
+into case values('10-jun-16',205,102,'heart attack')
+into case values('1-jan-20',207,100,'bone marrow')
+into case values('11-sep-18',206,101,'delivery')
+into case values('30-nov-19',205,102,'heart hole')
+into case values('10-nov-15',209,103,'alopecia')
+into case values('1-jan-16',201,102,'heart attack')
+select * from dual;
+
+select * from case;
+
+
+--------------//////////-------------QUERIES----------/////////////----------------
+
+    1. Find all the patients who are treated in the first week of this month.
+    
+   select * from patient
+   where pat_id in (select pat_id from case 
+   where admission_date between  trunc(sysdate,'mm') and 
+   next_day(trunc(sysdate,'mm'),to_char (trunc(sysdate,'mm'),'day'))); 
+
+    2. Find all the doctors who have more than 3 admissions today
+
+   SELECT D.FNAME,C.DOC_ID,COUNT(C.DOC_ID) FROM DOCTOR D,CASE C
+   WHERE D.DOC_ID=C.DOC_ID AND
+   TO_CHAR(ADMISSION_DATE,'DD/MM/YYYY')=TO_CHAR(SYSDATE,'DD/MM/YYYY')
+    GROUP BY C.DOC_ID ,FNAME 
+   HAVING COUNT(C.DOC_ID)>3;
+
+    3. Find the patient name (first,last) who got admitted today where the doctor is ‘RUCHI’.
+    select fname,patient.lname from patient
+   where pat_id in (select pat_id from case where trunc(admission_date,'j') = trunc(sysdate,'j') and doc_id in 
+   (select doc_id from doctor where fname='RUCHI'));
+    4. Find the Doctors whose phone numbers were not update (phone number is null)
+    
+    SELECT FNAME,LNAME FROM DOCTOR WHERE PHONE IS NULL;
+       
+    5. Display the doctors whose specialty is same as Doctor ‘RUCHI’.
+    
+    SELECT FNAME FROM DOCTOR
+    WHERE SPECIALITY IN(SELECT SPECIALITY FROM DOCTOR WHERE FNAME ='RUCHI');
+    
+    6. Find out the number of cases monthly wise for the current year.
+    
+    SELECT COUNT(ADMISSION_DATE) FROM CASE 
+    WHERE TO_CHAR('ADMISSION_DATE','SYSDATE','YY');
+
+    7. Display the doctors who don’t have any cases registered this week.
+
+     /* SELECT * FROM doctor
+      WHERE doc_id not in(SELECT case.doc_id FROM case 
+                          WHERE admission_date between  trunc(sysdate,'dy') and 
+                          next_day(trunc(sysdate,'dy'),TO_CHAR (trunc(sysdate,'dy'),'day'))); */
+    
+    8. Display Doctor Name, Patient Name, Diagnosis for all the admissions which happened on 1st of Jan this year.
+
+  /*--------------------------------*/
+
+    9. Display Doctor Name, patient count based on the cases registered in the hospital.
+    
+   SELECT doctor.fname as Doc_name,count(pat_id) FROM doctor 
+   JOIN case ON doctor.doc_id=case.doc_id
+   GROUP BY doctor.fname;
+
+    10. Display the Patient_name, phone, insurance company, insurance code (first 3 characters of insurance company)
+    
+    SELECT FNAME,LNAME,PHONE,INSURANCE_COMPANY,substr(INSURANCE_COMPANY,1,3)
+    FROM PATIENT ;
+
+
+
+
+
+

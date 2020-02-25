@@ -1,0 +1,107 @@
+--1. Product Model
+
+create table product
+(p_id number(4) primary key,
+p_name varchar2(20) not null,
+p_family varchar2(20),
+price number(5) not null,
+cost number(5) not null,
+launch_date date);
+
+insert all
+into product values(100,'Marker','stationary',25,22,'15-jan-14')
+into product values(101,'Mouse','computer',450,350,'16-apr-14')
+into product values(102,'Whiteboard','stationary',450,375,'20-aug-13')
+into product values(103,'sonyvaio','computer',35000,42000,'21-sep-13')
+into product values(104,'Pendrive','computer',400,350,'18-jan-19')
+select * from dual;
+
+
+--------------------------------------------------------------------------
+
+City_branch
+
+create table city
+(city_id number(2) primary key,
+city_name varchar2(20) not null,
+city_population varchar2(20));
+
+insert all
+into city values(10,'Bangalore',2367890)
+into city values(20,'Chennai',6474854)
+into city values(30,'Mumbai',783983736)
+select * from dual;
+
+
+create table branch
+(b_id number(4) primary key,
+b_name varchar2(20) not null,
+b_address varchar2(20),
+b_phone number(10),
+city_id number(2) references city(city_id));
+ 
+insert all
+into branch values(500,'BTM Layout','185, ring road',789056,10)
+into branch values(501,'Jayanagar','44, 15th main',578934,10)
+into branch values(502,'Ashok nagar','south end circle',2856726,20)
+into branch values(503,'Mount road','ashoka pillar',774589,20)
+into branch values(504,'JP nagar','Nandanam',9986253,10)
+select * from dual;
+
+---------------------------------------------------------------------
+Day3
+
+create table doctor
+(doc_id varchar2(4) primary key,
+fname varchar2(20),
+lname varchar2(20),
+specialty varchar2(20),
+phone number(10)
+)
+
+create table patient
+(pat_id varchar2(4) primary key,
+fname varchar2(20),
+lname varchar2(20),
+ins_comp varchar2(20),
+phone number(10)
+)
+
+
+create table case
+(admission_date date,
+pat_id varchar2(4),
+doc_id varchar2(4),
+diagnosis varchar2(20),
+constraint con_cpk primary key(admission_date,pat_id)
+)
+
+
+insert all
+into doctor values('d1','arun','patel','ortho',9675093453)
+into doctor values('d2','tim','patil','general',9675093453)
+into doctor values('d3','abhay','sharma','heart',9675093453)
+select * from dual;
+
+insert all
+into patient values('p1','akul','shankar','y',9148752347)
+into patient values('p2','aman','shetty','y',9512896317)
+into patient values('p3','ajay','shetty','n',9987321564)
+into patient values('p4','akshay','pandit','y',9112255889)
+into patient values('p5','adi','shankar','n',9177788821)
+select * from dual;
+
+
+insert all
+into case values('10-jun-16','p1','d1','fracture')
+into case values('03-may-16','p2','d1','bone cancer')
+into case values('17-apr-16','p2','d2','fever')
+into case values('28-oct-15','p3','d2','cough')
+into case values('10-jun-16','p3','d1','fracture')
+into case values('1-jan-16','p3','d1','bone marrow')
+into case values('11-sep-15','p3','d3','heart attack')
+into case values('30-nov-15','p4','d3','heart hole')
+into case values('10-nov-15','p4','d3','angioplasty')
+into case values('1-jan-16','p5,'d3','heart attack')
+select * from dual;
+---------------------

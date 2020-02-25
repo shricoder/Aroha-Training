@@ -1,0 +1,161 @@
+CREATE A TABLE CUSTOMER.
+
+
+
+
+
+
+Create table customer1(
+cust_id int primary key,
+cust_name varchar2(30),
+cust_phone Number(15),
+addr varchar2(100),
+gender varchar2(1),
+city varchar2(10),
+cust_dob Date);
+
+
+
+Alter table customer1
+add cust_email varchar(20) unique;
+
+ALTER TABLE CUSTOMER1
+ADD CONSTRAINT chk_customer1 check(cust_dob<'01-JAN-1997');
+
+Alter table customer1
+Modify gender varchar2(10);
+
+Alter table customer1
+drop column cust_email;
+
+Alter table customer1 
+Add Marital_Status Datatype(not null varchar2(10));
+
+
+
+Alter table customer1 
+Rename column addr to cust_location;
+
+
+Insert into Customer1 values(1,'Mahesh',982345645,'silk board','M','Bangalore','19-09-1996','UM');
+Insert into Customer1 values(2,'suresh',942345645,'jayanagar','M','Bangalore','19-12-1996','MARRIED');
+Insert into Customer1 values(3,'RUCHI',932345645,'JP NAGAR','F','Bangalore','19-09-2000','DIVORCED');
+Insert into Customer1 values(4,'jayesh',922345645,'WORLI','M','MUMBAI','19-09-1991','SINGLE');
+Insert into Customer1 values(5,'JAYANTI',912349845,'ELECTRONIC CITY','F','Mangalore','19-09-1992','UM');
+Insert into Customer1 values(6,'naveen',952340045,'HYD CITY','M','HYDERABAD','19-09-1993','MARRIED');
+Insert into Customer1 values(7,'Shridhar',962225645,'MG ROAD','M','Bangalore','19-09-1994',SINGLE');
+Insert into Customer1 values(8,'KUNTI',972344445,'NEHRU PLACE','F','NEW DELHI','19-09-1995','SEPARATED');
+Insert into Customer1 values(9,'Ramanath',992345645,'VIVEKNAGARA','M','Bangalore','19-09-1997','UM');
+Insert into Customer1 values(10,'Manju',909345645,'KUTCH','F','GUJARAT','23-10-1992','MARRIED');
+
+
+UPDATE CUSTOMER1
+SET CUST_CITY='BENGALURU'
+WHERE CUST_CITY='Bangalore';
+
+
+DELETE  FROM CUSTOMER1
+WHERE MARITAL_STATUS='UM';
+
+
+
+
+
+------------------------------/////////--CHARACTER FUNCTIONS--////////////----------------------------
+
+SELECT UPPER('SHRIDHAR') FROM DUAL;
+
+SELECT LOWER('SHRIDHAR') FROM DUAL;
+
+SELECT INITCAP('SHRIDHAR BHARDWAJ') FROM DUAL;
+
+SELECT ASCII('S') FROM DUAL;
+
+SELECT CHAR('H') FROM DUAL;
+
+SELECT LPAD(CUST_NAME,9,'-') FROM CUSTOMER1;
+
+SELECT RPAD(CUST_NAME,7,'-')  FROM CUSTOMER1;
+
+SELECT SUBSTR('Shridhar bhardwaj',3,4)
+     FROM CUSTOMER1;
+
+SELECT SUBSTR('Shridhar bhardwaj',3)
+     FROM CUSTOMER1;
+     
+SELECT INSTR('CORPORATE FLOOR','OR', 3, 2) "Instring"
+  FROM CUSTOMER1;
+  
+SELECT REPLACE('JACK and JUE','J','BL') "Changes"
+     FROM DUAL;
+     
+SELECT TRANSLATE('SQL*Plus User''s Guide', ' */''', '___') FROM DUAL;
+
+
+     
+SELECT TRIM(TRAILING 'O' FROM 'OOOOTRAINOOOO') FROM DUAL;
+
+SELECT TRIM(LEADING 'O' FROM 'OOOOTRAINOOOO') FROM DUAL;
+
+SELECT TRIM(BOTH 'O' FROM 'OOOOTRAINOOOO') FROM DUAL;
+
+SELECT LTRIM('O' FROM 'OOOOTRAINOOOO') FROM DUAL;
+
+
+SELECT  WM_CONCAT(CUST_NAME)
+FROM CUSTOMER1;
+
+
+
+SELECT LISTAGG(cust_name, '; ')
+         WITHIN GROUP (ORDER BY cust_name) "Emp_list",
+       MIN(cust_dob) "Earliest"
+  FROM CUSTOMER1
+  WHERE cust_id = 3;
+
+
+----------------////////-----DATE FUNCTIONS-----//////////------------------
+
+
+--select ROUND(SYSDATE,'month')from dual;           01-03-20
+
+
+--select round(sysdate,'yy') from dual;             01-01-20
+
+--select round(sysdate,'d') from dual;              23-02-20
+
+--select round(sysdate,'dd') from dual;             21-02-20
+
+
+select trunc(sysdate,'mon') from dual;             01-02-20
+
+select trunc(sysdate,'year') from dual;            01-01-20
+
+select trunc(sysdate,'dd') from dual;               20-02-20
+
+select trunc(sysdate,'d') from dual;               16-02-20(first day of current weak)
+
+select trunc(sysdate,'q') from dual;               01-01-20(first day of current quarter)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

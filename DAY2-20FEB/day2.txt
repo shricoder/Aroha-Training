@@ -1,0 +1,69 @@
+Create table customer(
+cust_id int primary key,
+cust_name varchar2(30),
+cust_phone Number(15),
+addr varchar2(100),
+gender varchar2(1),
+city varchar2(10),
+cust_dob Date);
+
+
+
+Alter table customer
+add cust_email Datatype(not null);
+
+Alter table customer
+Modify gender varchar2(10);
+
+Alter table customer
+drop column cust_email;
+
+Alter table customer 
+Add Marital_Status Datatype(not null varchar2(10));
+
+
+
+Alter table customer 
+Rename column addr to cust_location;
+
+
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+Insert into Customer valures(1,'rajesh',982345645,'silk board','M','Bangalore','19-09-1996');
+
+
+UPDATE CUSTOMER
+SET CUST_CITY='BENGALURU'
+WHERE CUST_CITY='BANAGALORE';
+
+
+DELETE  FROM CUSTOMER
+WHERE MARITAL_STATUS='UM';
+
+ALTER TABLE CUSTOMER
+ADD CONSTRAINT chk_customer check(cust_dob>'01-01-1998');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
